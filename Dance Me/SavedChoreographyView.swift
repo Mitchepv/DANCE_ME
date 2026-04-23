@@ -15,21 +15,29 @@ struct SavedChoreographyView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
+    @State private var showItems = false
     
     var body: some View {
        
     
         VStack(alignment: .center){
-            Spacer()
-            Spacer()
-            Spacer()
             
+            Spacer()
+            Spacer()
             Text(choreo.name)
                 .font(.largeTitle)
                 .bold()
-                .foregroundStyle(.purple)
+                .foregroundStyle(.white)
                 .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.black.opacity(0.8))
+                )
+            Spacer()
+            Spacer()
+            
+            Divider()
+                .padding()
             
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))],spacing: 12) {
@@ -39,24 +47,87 @@ struct SavedChoreographyView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50, height: 50)
+                                    .background(.blue.opacity(0.2))
                                 
                             } else if let name = move.assetName {
                                 Image(name)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 50, height: 50)
+                                    .background(.blue.opacity(0.2))
                             }
                         }
                     }
                 .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+           
+          
+            
+            Button {
+                showItems = false
+            
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                showItems = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                       showItems = false
+                   }
+
+            } label: {
+                Text("Play Choreography")
+                    .font(.headline)
+                    .padding()
+                    .background(.purple)
+                    .tint(.black)
+                    .bold()
+                    .cornerRadius(10)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
+                ForEach(Array(choreo.items.enumerated()), id: \.element.id) { index, item in
+                    Group {
+                        if let image = item.image {
+                            Image(uiImage: image )
+                                .resizable()
+                                .scaledToFit()
+                                .background(.blue.opacity(0.2))
+
+                        } else if let name = item.assetName {
+                            Image(name)
+                                .resizable()
+                                .scaledToFit()
+                                .background(.blue.opacity(0.2))
+                        }
+                    }
+                    .frame(width: 50, height: 50)
+                    .scaleEffect(showItems ? 1 : 0.2)
+                    .opacity(showItems ? 1 : 0)
+                    .animation(
+                        .spring(response: 0.9, dampingFraction: 0.85)
+                        .delay(Double(index) * 0.35),
+                        value: showItems
+                    )
+                }
+                
+            }
+            .padding(10)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.purple.opacity(0.2))
+        ignoresSafeArea()
+        
+        Spacer()
     }
+   
+    
 }
 
 #Preview {
     NavigationStack{
-        SavedChoreographyView(choreo: SavedChoreo(name: "one",items: [ ChoreoItem(assetName:"arms out"),
+        SavedChoreographyView(choreo: SavedChoreo(name: "one Dance",items: [ ChoreoItem(assetName:"arms out"),
             ChoreoItem(assetName:"dance"),
            ChoreoItem(assetName:"arm cover face"),
           ChoreoItem(assetName:"arm and leg out"),

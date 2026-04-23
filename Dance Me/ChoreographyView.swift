@@ -14,6 +14,7 @@ struct ChoreographyView: View {
     let vm: ChoreographyViewModel
     @State private var name = ""
     @State private var photoSelection: PhotosPickerItem?
+    @State private var showTextField = false
     let rows = [
         GridItem(.fixed(70)),
         GridItem(.fixed(70))
@@ -21,17 +22,18 @@ struct ChoreographyView: View {
    
     
     var body: some View {
-        
-        Text("Create your own choreography")
-            .font(.largeTitle)
-            .foregroundStyle(.black)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.purple.opacity(0.5))
-
-        Spacer()
-        
+    
         VStack{
+            
+            Text("Create your own choreography")
+                .font(.largeTitle)
+                .foregroundStyle(.black)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.purple.opacity(0.5))
+            
+            Spacer()
+            
             ScrollView(.horizontal){
                 LazyHGrid(rows:rows,spacing:5){
                     ForEach(vm.choreography.indices,id:\.self) { index in
@@ -52,15 +54,13 @@ struct ChoreographyView: View {
                         .cornerRadius(10)
                         .onTapGesture {
                             vm.removeMove(at: index)
-                        
+                            
                         }
                     }
                 }
             }
-
-            
             Spacer()
-  
+            
             GroupBox{
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
@@ -86,44 +86,60 @@ struct ChoreographyView: View {
             .padding(.vertical)
             
             Spacer()
-          
-            TextField("Enter choreography name", text: $name)
-                .autocorrectionDisabled()
-                .submitLabel(.done)
-                .keyboardType(.asciiCapable)
-                .textFieldStyle(.roundedBorder)
-                .overlay{
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.black, lineWidth: 2)
-                }
+            
+            if showTextField{
+                TextField("Enter choreography name", text: $name)
+                    .autocorrectionDisabled()
+                    .submitLabel(.done)
+                    .keyboardType(.asciiCapable)
+                    .textFieldStyle(.roundedBorder)
+                    .overlay{
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.black, lineWidth: 2)
+                    }
+            }
             
             Button{
-                vm.saveChoreo(name: name)
-                name = ""
+                if showTextField{
+                    vm.saveChoreo(name: name)
+                    name = ""
+                }
+                showTextField.toggle()
             }label: {
-                Text("Save Choreography")
+                Text(showTextField ? "Save" : "Save Choreography")
             }
             .font(.title2)
             .bold()
             .padding()
-            .frame(maxWidth: .infinity)
+            .tint(.black)
+            .background(.purple)
+            .cornerRadius(10)
+            
+
             
             Spacer()
-     
+            
             PhotosPicker(selection: $photoSelection, matching: .images,preferredItemEncoding:.automatic){
                 Image(systemName: "photo")
-                Text("Add your own choreography images")
+                Text("Add your own images")
             }
+            .font(.title2)
+            .bold()
+            .padding()
+            .tint(.black)
+            .background(.purple)
+            .cornerRadius(10)
             .task(id: photoSelection) {
                 await vm.addPhoto(from:photoSelection)
                 photoSelection = nil
             }
-            
-            
             Spacer()
-            
+            Spacer()
         }
-        .padding()
+        .background(.gray.opacity(0.2))
+        
+
+        
     
     }
    

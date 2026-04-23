@@ -9,8 +9,14 @@ import Foundation
 import SwiftData
 
 struct SavedChoreo: Identifiable {
-    let id = UUID()
+    var id = UUID() 
     var name: String
     let items: [ChoreoItem]
+    
+    init(id: UUID = UUID(), name: String, items: [ChoreoItem]) {
+            self.id = id
+            self.name = name
+            self.items = items
+        }
 
 }

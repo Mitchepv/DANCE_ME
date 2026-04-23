@@ -39,7 +39,7 @@ class ChoreographyViewModel {
     }
     
     func toggleMove(_ move: String) {
-        if let index = choreography.firstIndex(/*of: move*/where: { $0.assetName == move }) {
+        if let index = choreography.firstIndex(where: { $0.assetName == move }) {
               choreography.remove(at: index)
           } else {
 
