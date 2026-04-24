@@ -19,19 +19,23 @@ struct ChoreographyView: View {
         GridItem(.fixed(70)),
         GridItem(.fixed(70))
     ]
-   
+     
     
     var body: some View {
     
-        VStack{
+        VStack(spacing:20){
             
-            Text("Create your own choreography")
+            Spacer()
+            
+            Text("Create Choreography")
                 .font(.largeTitle)
+                .bold()
                 .foregroundStyle(.black)
-                .padding()
-                .frame(maxWidth: .infinity)
+                .padding(4)
+                .frame(maxWidth: .infinity, maxHeight: 100)
                 .background(.purple.opacity(0.5))
             
+                
             Spacer()
             
             ScrollView(.horizontal){
@@ -59,7 +63,8 @@ struct ChoreographyView: View {
                     }
                 }
             }
-            Spacer()
+            .frame(maxHeight:100)
+            
             
             GroupBox{
                 ScrollView {
@@ -79,6 +84,7 @@ struct ChoreographyView: View {
                     }
                     
                 }
+                .frame(maxHeight:200)
                 if !vm.choreography.isEmpty {
                     Text("Selected: \(vm.choreography.count)")
                 }
@@ -97,6 +103,7 @@ struct ChoreographyView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(.black, lineWidth: 2)
                     }
+                    .padding(.horizontal)
             }
             
             Button{
@@ -115,9 +122,6 @@ struct ChoreographyView: View {
             .background(.purple)
             .cornerRadius(10)
             
-
-            
-            Spacer()
             
             PhotosPicker(selection: $photoSelection, matching: .images,preferredItemEncoding:.automatic){
                 Image(systemName: "photo")
@@ -133,15 +137,16 @@ struct ChoreographyView: View {
                 await vm.addPhoto(from:photoSelection)
                 photoSelection = nil
             }
+            
             Spacer()
-            Spacer()
+           
         }
-        .background(.gray.opacity(0.2))
-        
-
-        
-    
+        .frame(maxWidth: .infinity, alignment: .top)
+        .background(.purple.opacity(0.2))
+        .ignoresSafeArea(edges: .all)
+  
     }
+        
    
 }
 

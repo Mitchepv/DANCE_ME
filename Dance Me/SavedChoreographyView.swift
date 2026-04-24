@@ -20,10 +20,11 @@ struct SavedChoreographyView: View {
     var body: some View {
        
     
-        VStack(alignment: .center){
+        VStack(alignment: .center, spacing: 20){
             
             Spacer()
             Spacer()
+            
             Text(choreo.name)
                 .font(.largeTitle)
                 .bold()
@@ -33,40 +34,42 @@ struct SavedChoreographyView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(.black.opacity(0.8))
                 )
-            Spacer()
-            Spacer()
-            
-            Divider()
-                .padding()
+ 
             
             ScrollView{
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))],spacing: 12) {
-                        ForEach(choreo.items) { move in
-                            if let image = move.image {
-                                Image(uiImage: image)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
+                    ForEach(Array(choreo.items.enumerated()), id: \.element.id) { index, item in
+                        Group {
+                            if let image = item.image {
+                                Image(uiImage: image )
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 50, height: 50)
                                     .background(.blue.opacity(0.2))
-                                
-                            } else if let name = move.assetName {
+
+                            } else if let name = item.assetName {
                                 Image(name)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 50, height: 50)
                                     .background(.blue.opacity(0.2))
                             }
                         }
+                        .frame(width: 50, height: 50)
+                        .scaleEffect(showItems ? 1 : 0.2)
+                        .opacity(showItems ? 1 : 0)
+                        .animation(
+                            .spring(response: 0.9, dampingFraction: 0.85)
+                            .delay(Double(index) * 0.35),
+                            value: showItems
+                        )
                     }
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .padding(10)
+                Spacer()
             }
-           
-          
             
             Button {
                 showItems = false
-            
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 showItems = true
                 }
@@ -84,44 +87,16 @@ struct SavedChoreographyView: View {
                     .bold()
                     .cornerRadius(10)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .padding()
             
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
-                ForEach(Array(choreo.items.enumerated()), id: \.element.id) { index, item in
-                    Group {
-                        if let image = item.image {
-                            Image(uiImage: image )
-                                .resizable()
-                                .scaledToFit()
-                                .background(.blue.opacity(0.2))
-
-                        } else if let name = item.assetName {
-                            Image(name)
-                                .resizable()
-                                .scaledToFit()
-                                .background(.blue.opacity(0.2))
-                        }
-                    }
-                    .frame(width: 50, height: 50)
-                    .scaleEffect(showItems ? 1 : 0.2)
-                    .opacity(showItems ? 1 : 0)
-                    .animation(
-                        .spring(response: 0.9, dampingFraction: 0.85)
-                        .delay(Double(index) * 0.35),
-                        value: showItems
-                    )
-                }
-                
-            }
-            .padding(10)
+            Spacer()
+           
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .ignoresSafeArea(edges: .all)
         .background(.purple.opacity(0.2))
-        ignoresSafeArea()
-        
-        Spacer()
+  
     }
-   
     
 }
 

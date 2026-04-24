@@ -27,8 +27,6 @@ class ChoreographyViewModel {
                  "arm cover face", "arm and leg out", "arms out","ballerina-pose","ballet-pose","bend  left leg right arm hold head","bend arm down and point up","bend kness in bend right arm up", "bend left leg and right arm left arm up","bend right leg left arm hold head","both arm on right","both arm up body left","both arm up body right","dance","dancing-man-posture","dancing","feet","female-flamenco-dancer","flamenco-dancer","flamenco-male-dancer-silhouettes","fornite dance 2","fornite dance 3","fornite dance 4","fornite dance 5",  "fortnite dance 1", "hand (1)", "hand","hello","i-love-you","ok","peace","people","people (1)","people (2)","person","squat  right arms bend and turn right","squat arm right","stand on right arm and leg left leg out","steo right","step back","step forward", "victory", "yoga-pose"]
         }
 
-
-
     func removeMove(at index: Int) {
         choreography.remove(at: index)
     }

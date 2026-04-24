@@ -18,122 +18,149 @@ struct SavedChoreography: View {
     @State private var photoItem: PhotosPickerItem?
     
     var body: some View {
-        List {
-            if vm.savedChoreo.isEmpty {
-                Text("No saved choreographies yet")
-                    .foregroundColor(.gray)
-            }
-            
-            
-            ForEach(vm.savedChoreo){ choreo in
-                HStack{
-                    Text(choreo.name)
-                        .font(.title)
+        VStack(spacing:16){
+            List {
+                if vm.savedChoreo.isEmpty {
+                    Text("No saved choreographies yet")
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+                        
                 }
-//                .contentShape(Rectangle())
-                .swipeActions(edge: .trailing) {
-                    Button(role:.destructive){
-                        delete(choreo)
+                
+                
+                ForEach(vm.savedChoreo){ choreo in
+                    HStack{
+                        Text(choreo.name)
+                            .font(.title)
                     }
+                    .swipeActions(edge: .trailing) {
+                        Button(role:.destructive){
+                            delete(choreo)
+                        }
+                        
+                        Button{
+                            selectedChoreo = choreo
+                            editedName = choreo.name
+                            editingItems = choreo.items
+                            showEditSheet = true
+                            
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }
+                        .tint(.green)
+                    }
+                    .background(
+                        NavigationLink("", destination: SavedChoreographyView(choreo: choreo))
+                            .opacity(0) )
                     
-                    Button{
-                        selectedChoreo = choreo
-                        editedName = choreo.name
-                        editingItems = choreo.items
-                        showEditSheet = true
-                        
-                    } label: {
-                        Label("Edit", systemImage: "pencil")
-                    }
-                    .tint(.purple)
                 }
-                .background(
-                    NavigationLink("", destination: SavedChoreographyView(choreo: choreo))
-                        .opacity(0) )
-                
-            }
-            .sheet(isPresented: $showEditSheet){
-                Text("Edit Name")
-                
-                TextField("Name", text: $editedName)
-                           .textFieldStyle(.roundedBorder)
-                           .padding()
-                
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
+                .sheet(isPresented: $showEditSheet){
+                    
+                    VStack{
+                        Text("Edit Name")
+                            .font(.title2)
                         
-                        ForEach(editingItems.indices, id: \.self) { index in
-                            
-                            let item = editingItems[index]
-                            
-                            VStack {
-                                if let image = item.image {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                } else if let name = item.assetName {
-                                    Image(name)
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
+                        
+                        TextField("Name", text: $editedName)
+                                   .textFieldStyle(.roundedBorder)
+                                   .padding()
+                        
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
+                                
+                                ForEach(editingItems.indices, id: \.self) { index in
+                                    
+                                    let item = editingItems[index]
+                                    
+                                    VStack {
+                                        if let image = item.image {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .frame(width: 50, height: 50)
+                                        } else if let name = item.assetName {
+                                            Image(name)
+                                                .resizable()
+                                                .frame(width: 50, height: 50)
+                                        }
+                                    }
+                                    .onTapGesture {
+                                        editingItems.remove(at: index)
+                                    }
                                 }
                             }
-                            .onTapGesture {
-                                editingItems.remove(at: index)
+                        }
+                        .frame(height: 150)
+                        
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(vm.moves, id: \.self) { move in
+                                    Image(move)
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .onTapGesture {
+                                            editingItems.append(ChoreoItem(assetName: move))
+                                        }
+                                }
                             }
                         }
-                    }
-                }
-                .frame(height: 150)
-                
-                
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(vm.moves, id: \.self) { move in
-                            Image(move)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .onTapGesture {
-                                    editingItems.append(ChoreoItem(assetName: move))
-                                }
-                        }
-                    }
-                }
-                
-                
-                PhotosPicker(selection: $photoItem, matching: .images) {
-                    Label("Add Photo", systemImage: "photo")
-                }
-                .task(id: photoItem) {
-                    if let item = photoItem,
-                       let data = try? await item.loadTransferable(type: Data.self),
-                       
-                        let uiImage = UIImage(data: data) {
                         
-                        editingItems.append(ChoreoItem(image: uiImage))
-                    }
-                    
-                    photoItem = nil
+                        
+                        PhotosPicker(selection: $photoItem, matching: .images) {
+                            Label("Add Photo", systemImage: "photo")
+                        }
+                        .task(id: photoItem) {
+                            if let item = photoItem,
+                               let data = try? await item.loadTransferable(type: Data.self),
+                               
+                                let uiImage = UIImage(data: data) {
+                                
+                                editingItems.append(ChoreoItem(image: uiImage))
+                            }
+                            
+                            photoItem = nil
+                        }
+                        
+                        Spacer()
+                        
+                        Button("Save") {
+                            if let selected = selectedChoreo,
+                               let index = vm.savedChoreo.firstIndex(where: { $0.id == selected.id }) {
+                                vm.savedChoreo[index] = SavedChoreo(
+                                    id: selected.id,
+                                    name: editedName,
+                                    items: editingItems
+                                )
+                            }
+                            resetEdit()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+                        
+                        
+                        Button("Cancel") {
+                            resetEdit()
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.red)
+                        
+                        Spacer()
+                        
+                    }.padding()
                 }
                 
-                Button("Save") {
-                    if let selected = selectedChoreo,
-                       let index = vm.savedChoreo.firstIndex(where: { $0.id == selected.id }) {
-                        vm.savedChoreo[index] = SavedChoreo(
-                            id: selected.id,
-                            name: editedName,
-                            items: editingItems
-                        )
-                    }
-                    resetEdit()
-                }
-                .buttonStyle(.borderedProminent)
-                
-                Button("Cancel") {
-                    resetEdit()
-                }
             }
+            .navigationTitle("Saved Choreos")
+            .listStyle(.plain)
+            .padding(.horizontal)
+                
+            
+          
         }
-        .navigationTitle("Saved Choreos")
+        .background(.purple.opacity(0.4))
+        
+     
+
         
     }
     
