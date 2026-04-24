@@ -11,7 +11,7 @@ Key technologies used:
 Swipeaction- delete and edit, Scrollableview, NavigationStack and NavigationLink, Struct and class 
 List  and arrays, Functions, Groupbox, LazyVGrids, Photopicker, animations
 
-Demonstration video: 
+Demonstration video: https://youtube.com/shorts/hsR3kZezh6k?feature=share 
 
 
 Summary of how I used AI: 
