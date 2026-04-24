@@ -14,7 +14,7 @@ List  and arrays, Functions, Groupbox, LazyVGrids, Photopicker, animations
 Demonstration video: https://youtube.com/shorts/hsR3kZezh6k?feature=share 
 
 
-Summary of how I used AI: 
+Summary of how I used AI: https://youtu.be/wHxYe3bx4nc 
 
 Contact Information:
 
