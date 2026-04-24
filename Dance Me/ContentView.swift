@@ -14,52 +14,57 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack{
-            Text("Dance Me")
-                .font(.largeTitle)
-                .foregroundStyle(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(.purple)
-            
-            Spacer()
-            
-            Text("Create you own choerography")
-                .font(.title)
-                .bold()
-                .foregroundStyle(.black)
-            
-            Image("DanceForMeIcon")
-                .resizable()
-                .scaledToFit()
-            
-            Spacer()
-            
-            NavigationLink{
-                ChoreographyView(vm:vm)
-            } label: {
-                Text("Create Choreography")
-                    .bold()
-                    .font(.title)
+            VStack{
+                Text("Dance Me")
+                    .font(.largeTitle)
                     .foregroundStyle(.white)
                     .padding()
+                    .frame(maxWidth: .infinity)
                     .background(.purple)
-                    .cornerRadius(10)
-            }
-         
-            NavigationLink{
-                SavedChoreography(vm:vm)
-            } label: {
-                Text("Saved Choreography")
-                    .bold()
+                
+                Spacer()
+                
+                Text("Create you own choerography")
                     .font(.title)
-                    .foregroundStyle(.white)
-                    .padding()
-                    .background(.purple)
-                    .cornerRadius(10)
+                    .bold()
+                    .foregroundStyle(.purple)
+                    .background(.white)
+                
+                Image("DanceForMeIcon")
+                    .resizable()
+                    .scaledToFit()
+                
+                Spacer()
+                
+                NavigationLink{
+                    ChoreographyView(vm:vm)
+                } label: {
+                    Text("Create Choreography")
+                        .bold()
+                        .font(.title)
+                        .foregroundStyle(.white)
+                        .padding()
+                        .background(.purple)
+                        .cornerRadius(5)
+                }
+             
+                NavigationLink{
+                    SavedChoreography(vm:vm)
+                } label: {
+                    Text("Saved Choreography")
+                        .bold()
+                        .font(.title)
+                        .foregroundStyle(.white)
+                        .padding()
+                        .background(.purple)
+                        .cornerRadius(5)
+                }
             }
+            
+            
         }
         
-        Spacer()
+        
     }
 }
 

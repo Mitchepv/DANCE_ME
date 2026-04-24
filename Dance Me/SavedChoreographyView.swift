@@ -97,6 +97,7 @@ struct SavedChoreographyView: View {
            
         }
         .ignoresSafeArea(edges: .all)
+        .background(.white)
         
   
     }

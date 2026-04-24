@@ -60,11 +60,13 @@ struct SavedChoreography: View {
                     VStack{
                         Text("Edit Name")
                             .font(.title2)
+                            .foregroundStyle(.black)
                         
                         
                         TextField("Name", text: $editedName)
                                    .textFieldStyle(.roundedBorder)
                                    .padding()
+                                   .background(.gray.opacity(0.2))
                         
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
@@ -148,15 +150,16 @@ struct SavedChoreography: View {
                         Spacer()
                         
                     }.padding()
+                        .background(.white)
                 }
                 
             }
             .navigationTitle(Text("Saved Choreographies"))
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
-            .backgroundStyle(.purple)
+            .background(.purple)
+            .foregroundStyle(.white)
             
-
  
     }
     

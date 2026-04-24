@@ -37,7 +37,7 @@ struct ChoreographyView: View {
                 .frame(maxWidth: .infinity, maxHeight: 100)
                 .background(.purple.opacity(0.5))
             
-                
+            
             Spacer()
             
             ScrollView(.horizontal){
@@ -66,6 +66,7 @@ struct ChoreographyView: View {
                 }
             }
             .frame(maxHeight:100)
+            .padding()
             
             
             GroupBox{
@@ -83,7 +84,7 @@ struct ChoreographyView: View {
                                     vm.toggleMove(move)
                                 }
                         }
-                    }
+                    }.background(.purple)
                     
                 }
                 .frame(maxHeight:200)
@@ -116,6 +117,8 @@ struct ChoreographyView: View {
                 showTextField.toggle()
             }label: {
                 Text(showTextField ? "Save" : "Save Choreography")
+                    .background(.gray.opacity(0.2))
+                    .foregroundStyle(.black)
             }
             .font(.title2)
             .bold()
@@ -141,11 +144,12 @@ struct ChoreographyView: View {
             }
             
             Spacer()
-           
+            
         }
         .frame(maxWidth: .infinity, alignment: .top)
-//        .background(.purple.opacity(0.2))
+        .background(.white)
         .ignoresSafeArea(edges: .all)
+        
   
     }
         
