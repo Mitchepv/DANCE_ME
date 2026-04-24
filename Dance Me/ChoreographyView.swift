@@ -12,9 +12,11 @@ import PhotosUI
 struct ChoreographyView: View {
     
     let vm: ChoreographyViewModel
+    
     @State private var name = ""
     @State private var photoSelection: PhotosPickerItem?
     @State private var showTextField = false
+    
     let rows = [
         GridItem(.fixed(70)),
         GridItem(.fixed(70))
@@ -142,7 +144,7 @@ struct ChoreographyView: View {
            
         }
         .frame(maxWidth: .infinity, alignment: .top)
-        .background(.purple.opacity(0.2))
+//        .background(.purple.opacity(0.2))
         .ignoresSafeArea(edges: .all)
   
     }
@@ -151,5 +153,6 @@ struct ChoreographyView: View {
 }
 
 #Preview {
-    ChoreographyView(vm: ChoreographyViewModel())
+        ChoreographyView(vm: ChoreographyViewModel())
+    
 }

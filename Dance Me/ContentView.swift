@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var vm = ChoreographyViewModel()
-    
+    @State private  var vm = ChoreographyViewModel()
+   
     
     var body: some View {
         NavigationStack{

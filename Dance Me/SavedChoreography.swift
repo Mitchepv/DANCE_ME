@@ -11,6 +11,7 @@ import PhotosUI //added for photo
 struct SavedChoreography: View {
     
     let vm: ChoreographyViewModel
+
     @State private var showEditSheet = false
     @State private var selectedChoreo: SavedChoreo?
     @State private var editedName = ""
@@ -18,44 +19,44 @@ struct SavedChoreography: View {
     @State private var photoItem: PhotosPickerItem?
     
     var body: some View {
-        VStack(spacing:16){
+
             List {
+                
                 if vm.savedChoreo.isEmpty {
                     Text("No saved choreographies yet")
                         .foregroundColor(.black)
                         .padding(.horizontal)
+                        .bold()
                         
-                }
+                } 
                 
                 
                 ForEach(vm.savedChoreo){ choreo in
-                    HStack{
-                        Text(choreo.name)
-                            .font(.title)
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button(role:.destructive){
-                            delete(choreo)
+                    NavigationLink(destination: SavedChoreographyView(choreo: choreo)){
+                        HStack{
+                            Text(choreo.name)
+                                .font(.title)
                         }
-                        
-                        Button{
-                            selectedChoreo = choreo
-                            editedName = choreo.name
-                            editingItems = choreo.items
-                            showEditSheet = true
+                        .swipeActions(edge: .trailing) {
+                            Button(role:.destructive){
+                                delete(choreo)
+                            }
                             
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
+                            Button{
+                                selectedChoreo = choreo
+                                editedName = choreo.name
+                                editingItems = choreo.items
+                                showEditSheet = true
+                                
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }
+                            .tint(.green)
                         }
-                        .tint(.green)
                     }
-                    .background(
-                        NavigationLink("", destination: SavedChoreographyView(choreo: choreo))
-                            .opacity(0) )
                     
                 }
                 .sheet(isPresented: $showEditSheet){
-                    
                     VStack{
                         Text("Edit Name")
                             .font(.title2)
@@ -150,18 +151,13 @@ struct SavedChoreography: View {
                 }
                 
             }
-            .navigationTitle("Saved Choreos")
+            .navigationTitle(Text("Saved Choreographies"))
             .listStyle(.plain)
-            .padding(.horizontal)
-                
+            .scrollContentBackground(.hidden)
+            .backgroundStyle(.purple)
             
-          
-        }
-        .background(.purple.opacity(0.4))
-        
-     
 
-        
+ 
     }
     
     private func delete(_ choreo: SavedChoreo) {
@@ -180,4 +176,5 @@ struct SavedChoreography: View {
 
 #Preview {
     SavedChoreography(vm:ChoreographyViewModel())
+
 }

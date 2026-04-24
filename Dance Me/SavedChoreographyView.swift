@@ -28,11 +28,11 @@ struct SavedChoreographyView: View {
             Text(choreo.name)
                 .font(.largeTitle)
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
                 .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(.black.opacity(0.8))
+                        .fill(.purple.opacity(0.8))
                 )
  
             
@@ -66,6 +66,8 @@ struct SavedChoreographyView: View {
                 .padding(10)
                 Spacer()
             }
+            .background(.purple.opacity(0.1))
+            .frame(maxWidth: .infinity, alignment: .top)
             
             Button {
                 showItems = false
@@ -79,7 +81,7 @@ struct SavedChoreographyView: View {
                    }
 
             } label: {
-                Text("Play Choreography")
+                Text("Play your Choreography")
                     .font(.headline)
                     .padding()
                     .background(.purple)
@@ -87,14 +89,15 @@ struct SavedChoreographyView: View {
                     .bold()
                     .cornerRadius(10)
             }
-            .padding()
-            
-            Spacer()
+          
+            Image("launchScreen")
+                .resizable()
+                .scaledToFit()
+                .padding(.bottom)
            
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea(edges: .all)
-        .background(.purple.opacity(0.2))
+        
   
     }
     
